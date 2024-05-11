@@ -296,9 +296,11 @@
       max-height: 90vh;
       overflow-x: hidden;
       overflow-y: auto;
+      border: none;
 
       .list-item {
         cursor: pointer;
+        animation: none;
         background-color: var(--white);
 
         &:hover {
@@ -308,6 +310,11 @@
         &:active {
           filter: brightness(0.9);
         }
+      }
+
+      .active-item {
+        color: white;
+        background: linear-gradient(45deg,#38bdf8,#2dd4bf);
       }
     }
   }

@@ -456,7 +456,7 @@ export function Selector<T>(props: {
             const selected = props.defaultSelectedValue === item.value;
             return (
               <ListItem
-                className={styles["selector-item"]}
+                className={selected ? styles["active-item"] : ""}
                 key={i}
                 title={item.title}
                 subTitle={item.subTitle}
@@ -464,20 +464,7 @@ export function Selector<T>(props: {
                   props.onSelection?.([item.value]);
                   props.onClose?.();
                 }}
-              >
-                {selected ? (
-                  <div
-                    style={{
-                      height: 10,
-                      width: 10,
-                      backgroundColor: "var(--primary)",
-                      borderRadius: 10,
-                    }}
-                  ></div>
-                ) : (
-                  <></>
-                )}
-              </ListItem>
+              ></ListItem>
             );
           })}
         </List>
