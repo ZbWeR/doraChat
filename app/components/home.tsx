@@ -30,6 +30,7 @@ import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
+import { BalanceBubble } from "./bubble";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -162,6 +163,8 @@ function Screen() {
               <Route path={Path.Settings} element={<Settings />} />
             </Routes>
           </div>
+
+          <BalanceBubble />
         </>
       )}
     </div>

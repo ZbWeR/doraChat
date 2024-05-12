@@ -1,0 +1,63 @@
+.bubble-container {
+    position: fixed;
+    bottom: 17%;
+    right: 2%;
+
+    .bubble-icon {
+        padding: 8px;
+        background: linear-gradient(45deg, #38bdf8, #2dd4bf);
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0,.2);
+        outline: none;
+        border: none;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            transform: translateY(-1px);
+        }
+
+
+        &:before {
+            max-width: 20rem;
+            border-radius: .25rem;
+            padding: .25rem .25rem;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            background-color: var(--black);
+            color: var(--white);
+            width: max-content;
+            content: attr(data-tooltip);
+
+            position: absolute;
+            transform: translate(-50%);
+            top: calc(-2rem - 4px);
+            left: 50%;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            border-width: 4px;
+            border-style: solid;
+            border-color: var(--black) transparent transparent transparent;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        &:hover:before, &:hover:after {
+            opacity: 1;
+        }
+    }
+}
