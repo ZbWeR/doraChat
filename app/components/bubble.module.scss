@@ -61,3 +61,42 @@
         }
     }
 }
+
+.statistic {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 8px;
+
+    &-item {
+        p {
+            font-size: 24px;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .label {
+            line-height: 1.5;
+            letter-spacing: 0;
+            color: rgb(166,166,166);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .remain-plenty {
+            background: linear-gradient(45deg, #38bdf8, #2dd4bf);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        .remain-little {
+            color: red;
+            font-weight: 700;
+        }
+    }
+}
+
+.tips {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 15px;
+    color: rgba(0, 0, 0,.45)
+}

@@ -1,71 +1,93 @@
 import { useAccessStore } from "../store";
 import InfoIcon from "../icons/info.svg";
+import LoadingIcon from "../icons/three-dots.svg";
 import styles from "./bubble.module.scss";
-import { showModal, Toast } from "./ui-lib";
+import { showModal } from "./ui-lib";
 import { useEffect, useMemo, useState } from "react";
 
 interface UsageInfo {
-  result: {
-    data: {
-      json: {
-        total: number;
-        used: number;
-      };
-    };
-  };
+  total: number;
+  used: number;
+  useGlobalLimit: boolean;
 }
 
+const formatNumberWithCommas = (x: number) => {
+  const regex = /\B(?=(\d{3})+(?!\d))/g;
+  return x.toFixed(0).replace(regex, ",");
+};
+
 const BalanceInformation = ({ apiKey }: { apiKey: string }) => {
-  const [data, setData] = useState<UsageInfo | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [usage, setUsage] = useState<UsageInfo | null>(null);
+  const [error, setError] = useState("");
+  const defaultError =
+    "Failed to load data. Please check the API key and your network connection.";
 
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await fetch(`/api/nextapi?query=${apiKey}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
+        if (!response.ok) throw new Error("Failed to fetch data");
         const jsonData = await response.json();
-        setData(jsonData);
+        if (jsonData?.result?.data?.json)
+          setUsage(jsonData?.result?.data?.json);
+        else setError(defaultError);
       } catch (err) {
-        setError(
-          "Failed to load data. Please check the API key and your network connection.",
-        );
+        setError(defaultError);
       }
     };
-
     getData();
   }, [apiKey]);
 
-  const usageData = useMemo(() => {
-    if (data) {
-      const { used, total } = data.result.data.json;
-      // 提前计算并格式化数值
-      const percentage = ((used / total) * 100).toFixed(2);
-      const formattedUsed = used.toFixed(0);
-      const formattedTotal = total.toFixed(0);
-
-      return {
-        percentage,
-        used: formattedUsed,
-        total: formattedTotal,
-      };
-    }
-    return null;
-  }, [data]);
+  const displayInfo = useMemo(() => {
+    if (!usage) return {};
+    const { used, total } = usage;
+    const percent = (((total - used) / total) * 100).toFixed(2);
+    return {
+      percent,
+      percentStatus: Number(percent) > 10 ? "remain-plenty" : "remain-little",
+      used: formatNumberWithCommas(used),
+      total: formatNumberWithCommas(total),
+    };
+  }, [usage]);
 
   if (error) return <div>Error: {error}</div>;
-
-  if (!data) return <div>请检查是否填写了 apikey</div>;
+  if (!usage)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50px",
+        }}
+      >
+        <LoadingIcon />
+      </div>
+    );
 
   return (
-    <div>
-      <h3>Usage: {usageData?.percentage}%</h3>
-      <p>
-        {usageData?.used} / {usageData?.total}
+    <>
+      <div className={styles["statistic"]}>
+        <div className={styles["statistic-item"]}>
+          <p className={styles["label"]}>Used (tokens)</p>
+          <p>{displayInfo.used} </p>
+        </div>
+        <div className={styles["statistic-item"]}>
+          <p className={styles["label"]}>Total (tokens)</p>
+          <p>{displayInfo.total}</p>
+        </div>
+        <div className={styles["statistic-item"]}>
+          <p className={styles["label"]}>Remain</p>
+          <p className={styles[displayInfo.percentStatus!]}>
+            {displayInfo.percent} %
+          </p>
+        </div>
+      </div>
+      <p className={styles["tips"]}>
+        Tips: 当你不需要上下文记忆时, 清除聊天记录后再进行对话, 可以节省 tokens
+        也会让结果更准确
       </p>
-    </div>
+    </>
   );
 };
 
@@ -81,7 +103,6 @@ export const BalanceBubble = () => {
   };
 
   if (!apiKey) return null;
-
   return (
     <div className={styles["bubble-container"]}>
       <button
