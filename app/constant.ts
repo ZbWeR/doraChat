@@ -127,6 +127,8 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gpt-4-turbo": "2023-12",
   "gpt-4-turbo-2024-04-09": "2023-12",
   "gpt-4-turbo-preview": "2023-12",
+  "gpt-4o": "2023-10",
+  "gpt-4o-2024-05-13": "2023-10",
   "gpt-4-vision-preview": "2023-04",
   // After improvements,
   // it's now easier to add "KnowledgeCutOffDate" instead of stupid hardcoding it, as was done previously.
@@ -134,7 +136,7 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gemini-pro-vision": "2023-12",
 };
 
-const openaiModels = ["gpt-3.5-turbo", "gpt-4-turbo"];
+const openaiModels = ["gpt-3.5-turbo", "gpt-4o"];
 
 const googleModels: string[] = [
   // "gemini-1.0-pro",
