@@ -489,7 +489,7 @@ export function ChatActions(props: {
   }, [chatStore, currentModel, models]);
 
   return (
-    <div className={styles["chat-input-actions"]}>
+    <div className={styles["chat-input-actions"]} id="chat-tools">
       {couldStop && (
         <ChatAction
           onClick={stopAll}
@@ -551,7 +551,7 @@ export function ChatActions(props: {
 
       <ChatAction
         text={Locale.Chat.InputActions.Clear}
-        icon={<BreakIcon />}
+        icon={<BreakIcon id="clear-history" />}
         onClick={() => {
           chatStore.updateCurrentSession((session) => {
             if (session.clearContextIndex === session.messages.length) {
@@ -567,7 +567,7 @@ export function ChatActions(props: {
       <ChatAction
         onClick={() => setShowModelSelector(true)}
         text={currentModel}
-        icon={<RobotIcon />}
+        icon={<RobotIcon id="change-model" />}
       />
 
       {showModelSelector && (
@@ -1206,7 +1206,7 @@ function _Chat() {
   }
 
   return (
-    <div className={styles.chat} key={session.id}>
+    <div className={styles.chat} key={session.id} id="chat-area">
       <div className="window-header" data-tauri-drag-region>
         {isMobileScreen && (
           <div className="window-actions">

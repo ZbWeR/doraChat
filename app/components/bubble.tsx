@@ -4,6 +4,8 @@ import LoadingIcon from "../icons/three-dots.svg";
 import styles from "./bubble.module.scss";
 import { showModal } from "./ui-lib";
 import { useEffect, useMemo, useState } from "react";
+import { Tour } from "antd";
+import { tourSteps } from "../utils/tour";
 
 interface UsageInfo {
   total: number;
@@ -92,8 +94,20 @@ const BalanceInformation = ({ apiKey }: { apiKey: string }) => {
 };
 
 export const BalanceBubble = () => {
+  const [open, setOpen] = useState<boolean>(false);
+
   const accessStore = useAccessStore.getState();
   const apiKey = accessStore.openaiApiKey;
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 600;
+    // 用户第一次访问时打开欢迎提示 && 不在移动端显示该消息
+    const isFirstVisit = localStorage.getItem("first-visit") === null;
+    if (isFirstVisit && !isMobile) {
+      setOpen(true);
+      localStorage.setItem("first-visit", "true");
+    }
+  }, []);
 
   const handleClick = () => {
     showModal({
@@ -104,14 +118,17 @@ export const BalanceBubble = () => {
 
   if (!apiKey) return null;
   return (
-    <div className={styles["bubble-container"]}>
-      <button
-        className={styles["bubble-icon"]}
-        data-tooltip="查看余额"
-        onClick={handleClick}
-      >
-        <InfoIcon />
-      </button>
-    </div>
+    <>
+      <div className={styles["bubble-container"]} id="balance-info">
+        <button
+          className={styles["bubble-icon"]}
+          data-tooltip="查看余额"
+          onClick={handleClick}
+        >
+          <InfoIcon />
+        </button>
+      </div>
+      <Tour steps={tourSteps} open={open} onClose={() => setOpen(false)} />
+    </>
   );
 };

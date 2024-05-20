@@ -31,8 +31,6 @@ import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
 import { BalanceBubble } from "./bubble";
-import { Tour } from "antd";
-import { tourSteps } from "../utils/tour";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -135,16 +133,8 @@ function Screen() {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
-  const [open, setOpen] = useState<boolean>(false);
-
   useEffect(() => {
     loadAsyncGoogleFont();
-    // 用户第一次访问时打开欢迎提示
-    const isFirstVisit = localStorage.getItem("first-visit") === null;
-    if (isFirstVisit) {
-      setOpen(true);
-      localStorage.setItem("first-visit", "true");
-    }
   }, []);
 
   return (
@@ -175,7 +165,6 @@ function Screen() {
           </div>
 
           <BalanceBubble />
-          <Tour steps={tourSteps} open={open} onClose={() => setOpen(false)} />
         </>
       )}
     </div>
