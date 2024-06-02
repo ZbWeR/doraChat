@@ -27,7 +27,9 @@ const BalanceInformation = ({ apiKey }: { apiKey: string }) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`/api/nextapi?query=${apiKey}`);
+        const response = await fetch(`/api/nextapi?query=${apiKey}`, {
+          method: "POST",
+        });
         if (!response.ok) throw new Error("Failed to fetch data");
         const jsonData = await response.json();
         if (jsonData?.result?.data?.json)
@@ -52,7 +54,7 @@ const BalanceInformation = ({ apiKey }: { apiKey: string }) => {
     };
   }, [usage]);
 
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>出错啦: {error}</div>;
   if (!usage)
     return (
       <div

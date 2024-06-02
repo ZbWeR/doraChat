@@ -6,7 +6,7 @@ function buildApiUrl(query: string): string {
   return `https://api.nextapi.fun/api/trpc/public.queryKeyUsage?input=${encodedKey}`;
 }
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const query = searchParams.get("query");
 
@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
   }
 
   const url = buildApiUrl(query);
-
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
