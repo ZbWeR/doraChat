@@ -3,7 +3,7 @@ import InfoIcon from "../icons/info.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 import styles from "./bubble.module.scss";
 import { showModal } from "./ui-lib";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Tour } from "antd";
 import { tourSteps } from "../utils/tour";
 
@@ -101,15 +101,21 @@ export const BalanceBubble = () => {
   const accessStore = useAccessStore.getState();
   const apiKey = accessStore.openaiApiKey;
 
-  useEffect(() => {
-    const isMobile = window.innerWidth < 600;
-    // 用户第一次访问时打开欢迎提示 && 不在移动端显示该消息
+  const shouldOpenTour = useCallback(() => {
+    // 用户第一次访问
     const isFirstVisit = localStorage.getItem("first-visit") === null;
-    if (isFirstVisit && !isMobile) {
+    // 是否为移动端
+    const isMobile = window.innerWidth < 600;
+    // 如果用户第一次在 PC 端访问并且填写了 API Key, 则打开欢迎提示
+    return isFirstVisit && !isMobile && apiKey;
+  }, [apiKey]);
+
+  useEffect(() => {
+    if (shouldOpenTour()) {
       setOpen(true);
       localStorage.setItem("first-visit", "true");
     }
-  }, []);
+  }, [shouldOpenTour]);
 
   const handleClick = () => {
     showModal({
